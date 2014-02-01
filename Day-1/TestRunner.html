@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JS as a loosely typed language</title>
+	<style>
+	#ulTestList{
+		width : 400px;
+	}
+	li{
+		margin-bottom: 5px;
+		list-style: none;
+		padding : 10px;
+		border-radius: 4px;
+	}
+	li.passed{
+		border : 1px solid green;
+		background-color: lightgreen;
+	}
+	li.failed{
+		border : 1px solid red;
+		background-color: lightpink;
+		font-weight: bold;
+		text-decoration: line-through;
+		font-style: italic;
+	}
+	</style>
+	<script src="calculator.js"></script>
+	<script>
+		function test(desc,testFn){
+			var testResult = testFn();
+			var testNode = document.createElement("li");
+			testNode.innerHTML = desc;
+			if (testResult === true){
+				testNode.className = "passed";
+			} else {
+				testNode.className = "failed";
+			}
+			document.getElementById("ulTestList").appendChild(testNode);
+		}
+		window.addEventListener("DOMContentLoaded",init);
+		//window.onload = init;
+
+		function init(){
+			test("adding two numbers",function(){
+				//arrange
+				
+				//act
+				var result = add(10,20);
+
+				//assert
+				return result === 30;
+			});
+			test("adding two numbers in string format",function(){
+				//arrange
+				
+				//act
+				var result = add("10","20");
+
+				//assert
+				return result === 30;
+			});
+			test("should be able to add just one number",function(){
+				//arrange
+				
+				//act
+				var result = add("10");
+
+				//assert
+				return result === 10;
+			});
+			test("should return 0 when no arguments are passed",function(){
+				//arrange
+				
+				//act
+				var result = add();
+				
+				//assert
+				return result === 0;
+			});
+			test("should be able to add more than two arguments",function(){
+				//arrange
+				
+				//act
+				var result = add(10,20,30,40);
+				
+				//assert
+				return result === 100;
+			});
+
+			test("should be able to pass 'functions returning numbers' as arguments",function(){
+				//arrange
+					var f1 = function(){ return 10; };
+					var f2 = function(){ return 20; };
+				//act
+				var result = add(f1,f2);
+				
+				//assert
+				return result === 30;
+			});
+
+			test("should be able to pass 'functions returning function returning numbers' as arguments",function(){
+				//arrange
+					var f1 = function(){ return function(){ return 10;}};
+					var f2 = function(){ return function(){ return 20;}};
+				//act
+				var result = add(f1,f2);
+				
+				//assert
+				return result === 30;
+			});
+
+			test("should be able to pass an array of numbers",function(){
+				//arrange
+				var numbers = [10,20,30,40];
+				
+				//act
+				var result = add(numbers);
+				
+				//assert
+				return result === 100;
+			});
+
+			test("should be able to pass more than one 'array of numbers'",function(){
+				//arrange
+				var numbers1 = [10,20];
+				var numbers2 = [30,40];
+				
+				//act
+				var result = add(numbers1, numbers2);
+				
+				//assert
+				return result === 100;
+			});
+
+			test("should be able to pass nested array of numbers",function(){
+				//arrange
+				var numbers1 = [10,[20,[30,[40]]]];
+				
+				//act
+				var result = add(numbers1);
+				
+				//assert
+				return result === 100;
+			});
+
+			test("should be able to pass array of functions returning number",function(){
+				//arrange
+				var fns = [
+					function (){ return 10;},
+					function (){ return 20;},
+					function (){ return 30;},
+					function (){ return 40;}
+				];
+				
+				//act
+				var result = add(fns);
+				
+				//assert
+				return result === 100;
+			});
+
+			test("should be able to pass array of functions returning array of numbers",function(){
+				//arrange
+				var fns = [
+					function (){ return [10,20];},
+					function (){ return [30,40];}
+				];
+				
+				//act
+				var result = add(fns);
+				
+				//assert
+				return result === 100;
+			});
+		}
+
+	</script>
+</head>
+<body>
+	<ul id="ulTestList">
+		
+	</ul>
+</body>
+</html>
