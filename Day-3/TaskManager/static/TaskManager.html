@@ -14,8 +14,20 @@
 	<script>
 	$(function(){
 		$("#btnAddTask").click(function(){
+			var taskName = $("#txtTask").val();
+			var data = {taskName : taskName};
+			$.ajax({
+				type : "post",
+				url : "/Tasks/Add",
+				dataType : "json",
+				contentType : "application/json",
+				data : JSON.stringify(data),
+				success : function(res){
+					$("<li>").html(res.name).attr("task-id",res.id).appendTo("#ulTaskList");
+				}
+			});
 			//add the task to the server
-			$("<li>").html($("#txtTask").val()).appendTo("#ulTaskList");
+			
 		});
 		$("#ulTaskList").on("click","li",function(){
 			//update the completion status in the server
