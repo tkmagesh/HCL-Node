@@ -1,0 +1,15 @@
+{
+  "name": "Demo-1",
+  "version": "0.1.0",
+  "description": "A simple program to demonstrate the application of node.js",
+  "main": "SimpleWebServer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "demo",
+    "node"
+  ],
+  "author": "Magesh K",
+  "license": "BSD-2-Clause"
+}

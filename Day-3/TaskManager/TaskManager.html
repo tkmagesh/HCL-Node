@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Task Manager</title>
+	<style>
+	.completed {
+		color : red;
+		font-style: italic;
+		text-decoration: line-through;
+	}
+	</style>
+	<script src="jquery-1.10.2.js"></script>
+	<script>
+	$(function(){
+		$("#btnAddTask").click(function(){
+			//add the task to the server
+			$("<li>").html($("#txtTask").val()).appendTo("#ulTaskList");
+		});
+		$("#ulTaskList").on("click","li",function(){
+			//update the completion status in the server
+			$(this).toggleClass("completed");
+		});
+		$("#btnRemoveCompleted").click(function(){
+			//remove tasks from the server
+			$("#ulTaskList > li.completed").fadeOut('slow',function(){ $(this).remove });
+		});
+
+	});
+	</script>
+</head>
+<body>
+	<h1>Task Manager</h1>
+	<span>Task :</span>
+	<input type="text" name="" id="txtTask">
+	<input type="button" value="Add Task" id="btnAddTask">
+	<input type="button" value="Remove Completed" id="btnRemoveCompleted">
+	<ul id="ulTaskList"></ul>
+</body>
+</html>
