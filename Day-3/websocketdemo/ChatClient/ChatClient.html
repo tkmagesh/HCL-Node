@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chat Client</title>
+	<script>
+	var socket = new WebSocket("ws://localhost:9090");
+	var nickName;
+	window.addEventListener("DOMContentLoaded",function(){
+		document.getElementById("chat").style.display = "none";
+		document.getElementById('btnLogin').addEventListener("click",onBtnLoginClick);
+		document.getElementById("btnSend").addEventListener("click",onBtnSendClick);
+		socket.addEventListener("message",onSocketMessage);
+	});
+	function onBtnLoginClick(){
+
+		nickName =document.getElementById("txtNickName").value;
+		document.getElementById("nickName").innerText = nickName;
+		var msgToServer = JSON.stringify({
+			type : "login",
+			data : {nickName : nickName}
+		});
+		socket.send(msgToServer);
+	}
+	function onBtnSendClick(){
+		var msg = document.getElementById("txtMessage").value;
+		var msgToServer = JSON.stringify({
+			type : "send",
+			data : {
+				to : document.getElementById("userList").value,
+				msg : msg
+			}
+		});
+		socket.send(msgToServer);
+		
+	}
+	function onSocketMessage(msgArg){
+		var msgObj = JSON.parse(msgArg.data);
+		switch (msgObj.type){
+			case  "loginResponse" :
+				socket.key = msgObj.data.whoAmI.key;
+				loadUsers(msgObj.data.existingUsers);
+				document.getElementById("chat").style.display = "block";
+				document.getElementById("login").style.display = "none";
+
+				break;
+			case "loggedIn":
+				loadUserInfo(msgObj.data);
+				break;
+			case  "message" :
+				var s = "<strong>" + msgObj.data.from.nickName + "</strong> " + msgObj.data.msg;
+				displayMessage(s);
+				break;
+		}
+	}
+	function displayMessage(msg){
+		document.getElementById("divMessages").innerHTML += msg + "<br/>"
+	}
+	function loadUsers(userInfos){
+		document.getElementById("userList").innerHTML = "<option value='All'>All</option>";
+		userInfos.forEach(function(ui){
+			loadUserInfo(ui);
+		});
+	}
+	function loadUserInfo(ui){
+		var option = document.createElement("option");
+			option.setAttribute("value",ui.key);
+			option.innerText = ui.nickName;
+			document.getElementById("userList").appendChild(option);
+	}
+	</script>
+</head>
+<body>
+	<div id="login">
+		<span>NickName :</span>
+		<input type="text" name="" id="txtNickName">
+		<input type="button" value="Login" id="btnLogin">
+	</div>
+	<div id="chat">
+		<h3 id="nickName"></h3>
+		<span>Message :</span>
+
+	<input type="text" name="" id="txtMessage">
+	<select name="" id="userList"></select>
+	<input type="button" value="Send" id="btnSend">
+	<div id="divMessages"></div>	
+	</div>
+	
+</body>
+</html>

@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1 Tasks
+  a(href="/tasks/add") New Task
+  ul(id="ulTaskList")
+    each task, i in tasks
+      li #{task.name}
