@@ -1,0 +1,17 @@
+{
+  "name": "mochaDemo",
+  "version": "0.1.0",
+  "description": "Mocha Demo",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "demo"
+  ],
+  "author": "Magesh K",
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "should": "~3.1.2"
+  }
+}
